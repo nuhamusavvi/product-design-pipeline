@@ -161,7 +161,7 @@ runs without the surrounding Arabic breaking apart.
 - **Digits are Latin `0-9` throughout, on every screen, including Arabic ones.** Prices, counts,
   dates, badges, percentages, page numbers — all Latin. This is the convention in Arabic apps and
   websites, and it applies even where the surrounding copy is fully Arabic.
-- Dates follow the calendar chosen at stage 0.
+- Dates follow the calendar recorded in `00-run-log.md`. If it is still open, do not invent one.
 
 ### The one component that stays English — date and time pickers
 

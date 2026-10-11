@@ -746,7 +746,7 @@ Consequences for implementation:
 - Everything *outside* the panel — the label, the helper text, the surrounding form — is Arabic RTL
   as normal.
 
-**Calendar system** — Gregorian or Hijri — still comes from the stage-0 intake. A Hijri calendar
+**Calendar system** — Gregorian or Hijri — comes from the recorded choice in `00-run-log.md`. If that row is still Open, do not invent a calendar system. A Hijri calendar
 keeps the same English/LTR treatment for its month names unless the client says otherwise.
 
 ---

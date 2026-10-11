@@ -9,8 +9,9 @@ Ids are permanent once written: `F-xx`, `S-xx`, `E-xx`.
 
 ## 09 — `09-user-flows.md`
 
-One flow per primary use case, plus flows for cross-cutting journeys (onboarding, auth, payment,
-recovery) even when the source assumed them.
+One flow per primary use case. Add a cross-cutting journey (onboarding, auth, payment, recovery)
+only when the source or the PRD supports it, and tag invented steps as assumptions. Do not invent
+status transitions; point at the open question in `01-prd.md` §8.
 
 ````markdown
 # User Flows — <Product Name>
@@ -76,7 +77,7 @@ Where the flow crosses roles (customer submits → admin approves), say so and n
 # Screen List — <Product Name>
 
 <count> screens across <count> modules.
-**Platform**: <from the stage-0 intake — mobile app · responsive web · both · admin back-office>
+**Platform**: <confirmed platform from `00-run-log.md` — mobile app · responsive web · both · admin back-office. If still open, ask before writing platform-only screens.>
 
 ## Coverage check
 Every node in `09-user-flows.md` maps to a screen below. Screens added beyond the flows are marked
@@ -108,8 +109,10 @@ Must agree with `04-permission-matrix.md`. Any disagreement is a gap for stage 1
 
 **Screens that flows always imply — include them unless explicitly ruled out.**
 
-Which ones apply depends on the **platform confirmed at stage 0**. Getting this wrong produces a web
-app with a splash screen and a camera-permission primer, or a mobile app with a print view.
+Which ones apply depends on the **confirmed platform** in `00-run-log.md`. If that row is still
+open, ask the Arabic platform question before adding any platform-only screen. Do not guess a
+platform to fill the list. Getting this wrong produces a web app with a splash screen and a
+camera-permission primer, or a mobile app with a print view.
 
 *Every platform:*
 welcome/onboarding · sign-up, sign-in, OTP, forgot/reset password · home/dashboard · search +
@@ -131,9 +134,9 @@ content · account-switching if multi-tenant.
 list + detail + approval queue per managed entity · bulk-action confirmation · audit log ·
 user and role management · export/report builder · system settings.
 
-Mark each `[implied]` if the Arabic source did not name it, and mark any screen that exists only
-because of the platform choice — those are the first to disappear if the platform changes at the
-stage-13 confirmation.
+Mark each `[implied]` if the Arabic source did not name it. An implied screen is an assumption,
+not a confirmed requirement. Mark any screen that exists only
+because of the platform choice — those are the first to disappear if the platform later changes.
 
 **Column notes**
 - **Arabic UI title** — the real string that will appear on the screen. Stage 14 reuses it verbatim.
@@ -144,6 +147,10 @@ stage-13 confirmation.
 ---
 
 ## 11 — `11-states-and-edge-cases.md`
+
+Write confirmed UI states from the source and the PRD. A state the source did not describe is an
+assumption or an open question, not a confirmed requirement. Do not invent domain statuses to fill
+the table. The rows below are a format sample; do not copy them into a run.
 
 ````markdown
 # User States & Edge Cases — <Product Name>

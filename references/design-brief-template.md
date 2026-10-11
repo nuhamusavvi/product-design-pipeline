@@ -1,7 +1,9 @@
 # Design Brief Template — Stage 13
 
-Written in **English**. Ask the stage-13 questions in `intake-questions.md` first — **question 1 is
-the platform confirmation**, and nothing visual is proposed until it is answered.
+Written in **English**. User-facing questions are Arabic, from `intake-questions.md`. Nothing
+visual is proposed until the platform is settled. If the run log already records a confirmed
+platform, use it and do not ask again. If it is still open, ask the Arabic platform question and
+wait. Then ask only the brand questions that are still unanswered.
 
 The brief is a contract: stage 15 implements it literally. Anything vague here becomes a guess
 there. Every color gets a hex, every font a name and weight, every spacing a number.
@@ -31,13 +33,14 @@ hover-only affordance on a mobile profile, is a defect.
 ```markdown
 # Design Brief — <Product Name>
 
-Basis: `01-brd.md`, `10-screen-list.md`, platform and brand inputs in `00-run-log.md`.
+Basis: `01-prd.md`, `10-screen-list.md`, platform and brand inputs in `00-run-log.md`.
 Provenance: `[client]` = from the client's existing brand · `[defined]` = defined in this brief.
 
 ## 0. Platform and viewport
 
-Confirmed at the stage-13 gate. Everything below this section is designed for it, and stages 14
-and 15 implement it literally.
+Taken from the confirmed platform in the run log. Everything below this section is designed for
+it, and stages 14 and 15 implement it literally. If the platform is still open, do not write this
+section yet.
 
 | | |
 |---|---|
@@ -190,7 +193,7 @@ Specify for every profile:
   placement (leading icon sits on the **right** in RTL), full-width rules.
 - **Inputs** — label position, height, border, placeholder policy, helper text, error text and
   icon, required marker, RTL caret and alignment (`text-align: start`).
-- **Selects, pickers, date/time** — including the calendar convention chosen at stage 0.
+- **Selects, pickers, date/time** — including the calendar convention recorded in the run log. If it is still open, do not invent one.
 - **Cards** — padding, radius, border vs shadow, image ratio, tappable area.
 - **Lists and rows** — height, divider style, leading/trailing element placement in RTL,
   chevron direction (points **left** in RTL).

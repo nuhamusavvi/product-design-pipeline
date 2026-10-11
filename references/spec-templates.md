@@ -1,9 +1,14 @@
 # Specification Templates — Documents 05 to 07
 
-The engineering half of the package. `01`–`04` say why and what must be true; these three say what
-the system does, what it stores, and what it exposes.
+The engineering half of the package. `01-prd.md` is the primary product-requirements document.
+These three documents add testable and technical detail and trace back to it. They do not restate
+the PRD, and they do not turn the sample rows in this file into requirements.
 
 Written in **English**. Audience: tech lead, backend, frontend.
+
+Do not invent behavior, statuses, entities, or endpoints that the PRD left open. A speculative
+field is an assumption `A-xx` or an open question `Q-xx`, not a final requirement. The backend
+handoff stays traceable to confirmed product behavior.
 
 **Load `../feature-forge/references/ears-syntax.md`** before writing the SRS — it holds the full
 EARS pattern set and worked examples. Only the five-line quick reference is inlined below.
@@ -18,12 +23,15 @@ directly testable. Every non-functional requirement carries a number.
 ````markdown
 # Software Requirements Specification — <Product Name>
 
-Version 1.0 · Derived from `01-brd.md`, `02-business-rules.md`, `03-use-cases.md`,
+Version 1.0 · Derived from `01-prd.md`, `02-business-rules.md`, `03-use-cases.md`,
 `04-permission-matrix.md`. Every requirement below traces to at least one of them.
+Each `FR-xx` formalizes a confirmed PRD behavior. If the behavior is still `Q-xx`, do not write
+an `FR-xx` that pretends it is confirmed.
 
 ## 1. Purpose and scope
-What this system does, its boundaries, and what it explicitly does not do. Name the platforms from
-the stage-0 intake.
+What this system does, its boundaries, and what it explicitly does not do. Name the platform from
+the run log when it is Confirmed. When it is still Open, say so and do not invent a compatibility
+target.
 
 ## 2. System context
 
@@ -146,6 +154,9 @@ enforce is named by at least one `FR-xx`; every NFR row has a number and a measu
 
 Audience: backend. Enough that a schema can be written without guessing.
 
+Trace entities to confirmed PRD behavior. Do not treat the sample attributes, enums, or status
+values below as requirements for the current product. Unnamed statuses stay open questions.
+
 ````markdown
 # Data Model — <Product Name>
 
@@ -240,9 +251,11 @@ Audience: backend and frontend together. Enough to agree on the contract and sta
 ````markdown
 # API Surface — <Product Name>
 
-**This is a sketch, not a specification.** It fixes the shape of the contract — resources, methods,
-auth, and error semantics — so frontend and backend can start in parallel. The implementing team
-owns the final OpenAPI document, status-code minutiae, and payload details.
+**This is a sketch, not a final requirement.** It proposes the shape of the contract — resources,
+methods, auth, and error semantics — so frontend and backend can start in parallel. The
+implementing team owns the final OpenAPI document, status-code minutiae, and payload details.
+Every endpoint traces to a confirmed PRD behavior or is marked `A-xx`. Do not present a sample
+payload from this template as a confirmed contract.
 
 ## Conventions
 

@@ -19,8 +19,11 @@ sprints from.
 ````markdown
 # User Stories — <Product Name>
 
-Derived from `03-use-cases.md` and `05-srs.md`. Every story implements at least one `FR-xx`;
-every `FR-xx` is implemented by at least one story. Gaps are listed in §6.
+Derived from `03-use-cases.md` and `05-srs.md`, which trace to `01-prd.md`. Every story
+implements at least one `FR-xx`; every `FR-xx` is implemented by at least one story. Gaps are
+listed in §6. Acceptance criteria are written in this document. The PRD lists only criteria the
+source already confirmed and points here for the rest. Do not invent a story for behavior that
+is still an open question.
 
 ## 1. Summary
 
@@ -84,7 +87,7 @@ every `FR-xx` is implemented by at least one story. Gaps are listed in §6.
   Then attempts are refused for 30 minutes,
   And the remaining wait is shown.
 
-**Notes / out of scope**: WhatsApp delivery is Phase 2 (see `01-brd.md` §5).
+**Notes / out of scope**: WhatsApp delivery is Phase 2 (see `01-prd.md` §5).
 
 <repeat per story>
 
@@ -105,7 +108,7 @@ every `FR-xx` is implemented by at least one story. Gaps are listed in §6.
 
 | Release | Epics | Stories | Points | Delivers | Cut line rationale |
 |---------|-------|--------:|-------:|----------|--------------------|
-| MVP | EP-01…EP-04 | 26 | 98 | A customer can register, search, book, and pay | Matches `01-brd.md` §5 |
+| MVP | EP-01…EP-04 | 26 | 98 | A customer can register, search, book, and pay | Matches `01-prd.md` §5 |
 
 ## 6. Coverage and gaps
 
@@ -344,7 +347,7 @@ below. No server, no build step.
 
 | # | Document | Answers | Primary owner |
 |---|----------|---------|---------------|
-| 01 | `01-brd.md` | Why are we building this, for whom, what is in scope | Product |
+| 01 | `01-prd.md` | Confirmed product requirements, actors, behavior, constraints, and open questions | Product |
 | 02 | `02-business-rules.md` | What must always be true | Product + QA |
 | 03 | `03-use-cases.md` | How does an actor reach a goal | BA |
 | 04 | `04-permission-matrix.md` | Who may do what, to which data | Backend + security |
@@ -375,7 +378,7 @@ below. No server, no build step.
 - Ids are stable: `G` objective · `P` persona · `BR` rule · `UC` use case · `FR`/`NFR` requirement ·
   `EN` entity · `API` endpoint · `EP` epic · `US` story · `F` flow · `S` screen · `E` edge case ·
   `TC` test case · `A` assumption · `Q` open question.
-- Open questions are collected in `01-brd.md` §8. Assumptions in §7. Both need client answers.
+- Open questions are collected in `01-prd.md` §8. Assumptions in §7. A default or an assumption is not a confirmed requirement. Non-blocking questions do not stop the package.
 
 ## Status
 

@@ -107,7 +107,7 @@ docs-html/
   index.html                       dashboard, gallery, coverage matrix, readiness panel
   docs.css                         house tokens + all shared components
   docs.js                          shared interaction layer
-  01-brd.html
+  01-prd.html
   02-business-rules.html
   03-use-cases.html
   04-permission-matrix.html
@@ -281,8 +281,11 @@ Guard everything: `if (!el) return;`. A missing section on one page must not bre
     **the file to send a client**, because that is what it is for and nobody will guess.
 - Footer with run metadata: folder, date, source language, stage approvals from `00-run-log.md`.
 
-### `01-brd.html`
+### `01-prd.html`
 *Patterns: `16-implementation-plan.html` + `14-research-feature-explainer.html`.*
+
+This page renders `01-prd.md`. It does not add a BRD page. Link `brd.md` only from the PRD's
+related-documents table when that file exists. Do not add `brd.html` to the default page set.
 
 - Executive summary and problem statement as prose in `.narrow`.
 - `G-xx` objectives as a `table.data` with success measure, baseline, and target; non-goals as a
@@ -290,9 +293,12 @@ Guard everything: `if (!el) return;`. A missing section on one page must not bre
 - `P-xx` persona cards in a `.grid` — who / goal / frustrations / success — with the id as a `.tag`.
 - Scope in/out as two columns; release phasing as a `.milestone` timeline.
 - `A-xx` assumptions and `Q-xx` open questions as `.q` cards, with blocking items marked
-  `.badge-danger` and sortable to the top.
+  `.badge-danger` and sortable to the top. Do not render an assumption as a confirmed requirement.
+- Confirmed product behavior (§12), the product-level permissions summary (§13), and any
+  acceptance criteria the source already stated (§14). Do not duplicate the permission matrix,
+  the SRS, or the story acceptance criteria on this page.
 - Glossary `table.data` with the Arabic column in `.ar-cell`.
-- Related-documents card row linking 02/03/04/05/08.
+- Related-documents card row linking 02/03/04/05/08. Include `brd.md` only when that file exists.
 
 ### `02-business-rules.html`
 *Pattern: `18-editor-triage-board.html`.*
