@@ -1,8 +1,10 @@
 # Intake Questions
 
-Stage 0 decides what can be written now. Stage 13 settles whatever visual design still needs.
-Ask with `AskQuestion` when that tool is available. If `AskQuestion` is not available, ask in
-Arabic chat and wait. Do not invent a tool name or continue as if the user had answered.
+Stage 0 decides what can be written now. Later stages ask only when a missing fact would force
+an invented business rule or would materially change a screen.
+
+Ask with `AskQuestion` when that tool is available. If it is not available, ask in Arabic chat
+and wait. Do not invent a tool name or continue as if the user had answered.
 
 The prompt, any description the user sees, and every option label are Arabic. Ids may stay
 English. Labels are short. Add **غير ذلك** when the listed options may not cover the answer.
@@ -12,113 +14,164 @@ not pad the batch to four.
 
 ## The rule that makes this fast
 
-Ask only what the next meaningful decision needs. Read the source and `00-run-log.md` first.
+Ask only what the next meaningful decision needs. Read the source and `00-analysis-ar.md` first.
 
 - If the answer is already there, use it. Do not ask again.
-- If the gap does not block this stage, record `Q-xx` under **Open Questions** in `01-prd.md` §8
-  and continue.
-- If a documented default covers it, use the default, mark it **Default**, and do not ask the
+- If the gap does not block this stage, record `Q-xx` under **أسئلة مفتوحة** and continue.
+- If a documented default covers it, use the default, mark it **افتراضي**, and do not ask the
   user to confirm it.
 - Never invent a business rule, status, or transition. Never write an assumption as if the user
   confirmed it.
-- After the user answers, update the run log and continue from the stage that was waiting. Do
+- After the user answers, update the analysis and continue from the stage that was waiting. Do
   not restart intake.
+- Do not stop the run because one non-blocking question is still open.
+- Do not ask for approval at the end of a stage.
 
 **Scope defaults to MVP** unless the user specified otherwise. When the source already describes
 a small initial scope, do not ask them to confirm MVP.
 
-**A missing product name does not block analysis.** Use a temporary descriptive English name,
-mark it **Provisional** in the run log, and continue.
+**A missing product name does not block analysis.** Use a temporary descriptive English slug,
+mark the name **مؤقت** in the analysis, and continue.
+
+**UI language and direction are not assumed.** Arabic requirements do not by themselves make the
+interface Arabic or right to left. If a retrieved task states the interface language or
+direction, record it as **مؤكد**. Otherwise record `Q-xx` and continue. Stage 8 must not tell
+Lovable to use RTL unless that conclusion is supported.
+
+**Prompts target Lovable, which builds a web UI.** Do not ask for a platform unless native-only
+behavior would change a screen. Otherwise record `Q-xx` and continue with a responsive web UI.
+
+**Brand logo, colors, and visual vibe are optional.** Do not ask for them at intake. Stage 8
+uses placeholders when they are missing. Ask only if the user said a brand rule exists but did
+not supply the value the prompt must obey.
+
+---
+
+## Stage 0 — several Plane tasks, one project
+
+Use this when the user points at more than one Plane task, a Plane project, or pastes several
+task descriptions. One pasted paragraph follows the same summary shape with a single source row.
+
+All supplied tasks belong to the current project unless the user explicitly says some of them are
+a different project. Do not open a second run per task.
+
+### Collect
+
+1. Make the source list first: every task the user named or pasted.
+2. For each task, keep the title and the identifier when either exists. Copy the identifier
+   exactly. If the identifier is missing, write **غير متوفر** and keep the title.
+3. Content may arrive in two ways only:
+   - The user pasted the description in the conversation.
+   - A Plane tool is actually available in this session. Discover that tool's schema, then
+     retrieve the named tasks. Do not invent the tool name, and do not change Plane configuration.
+4. If a task was named and neither paste nor a successful retrieval produced its description,
+   mark that row **لم يُقرأ**. Leave the description empty. Tell the user in Arabic which
+   identifiers or titles could not be read. Do not guess the body.
+5. Do not start the summary, and do not start stage 1, until every task that can be read has
+   been read.
+
+### Extract, then merge
+
+Read each retrieved description and note its purpose before merging:
+
+| Purpose | What to do |
+|---|---|
+| Requirement or workflow note | Extract the confirmed behavior into the summary |
+| Bug, chore, or implementation note | Record it in the source table. Do not turn it into a product requirement unless the text states one |
+| Question or empty body | Record `Q-xx` or **لم يُقرأ**. Do not fill the gap |
+| Unrelated to this product | Keep the source row and exclude it from confirmed requirements. Say why |
+
+Then merge. Overlapping statements become one confirmed requirement, with every supporting task
+identifier listed. Do not drop a detail that only one task mentioned.
+
+A conflict is two retrieved tasks that cannot both be true. Record both wordings and both
+identifiers under **التعارضات**. Ask in Arabic only when choosing a side would change the next
+stage. One batch, at most four questions, including any other blocking question. If the conflict
+can wait, leave it and continue.
+
+### What not to do
+
+- Do not run stages 1–10 separately for each task.
+- Do not create a screen because a Plane task exists.
+- Do not treat a task title as a requirement when the description says otherwise.
+- Do not analyze a task whose text was not retrieved.
+
+### Then write section 0
+
+Fill the summary in `references/analysis-ar.md`. It must contain the project overview, confirmed
+requirements, actors and roles, functional capabilities, business workflows, conflicts, open
+questions, and the source-task table. Non-critical open questions stay in that table and do not
+block stage 1.
 
 ---
 
 ## Stage 0 — what to record, and what to ask
 
-Record everything you can in the `## Intake answers` table before asking anything. Status is
-**Confirmed**, **Default**, **Assumption**, or **Open**.
+Record everything you can in the analysis header and in section 0 before asking anything.
+Status is **مؤكد**, **افتراضي**, **افتراض**, or **مفتوح**.
 
 Ask in Arabic only for gaps that block the next stage. Explain in one short Arabic line why the
 answer matters when that is not obvious. Do not walk the pool below as a checklist.
-
-### Platform
-
-Ask only when the platform is unspecified **and** the current decision needs it (screen list,
-navigation, frame, or any other choice the platform would change). Do not assume one.
-
-Options:
-
-- تطبيق موبايل
-- تطبيق ويب
-- الاثنين معاً
-- غير محسوم حالياً
-
-If the user chooses **غير محسوم حالياً**, record the open question and continue with any work
-that does not depend on a frame. Do not invent a platform. Before wireframes or UI screens, this
-question blocks.
-
-When they choose, map the answer onto one profile in `design-brief-template.md` §Platform
-profiles and record the frame, breakpoints, and navigation pattern. A web product that is
-clearly an internal admin tool uses the admin profile; note that in the run log. Do not add a
-fifth option unless that split itself blocks the current decision.
-
-Follow-ups, only when that answer makes them blocking:
-
-- **تطبيق موبايل**: iOS, Android, or both — only if the design would actually differ.
-- **تطبيق ويب or الاثنين معاً**: a minimum width or print support — only if a screen depends on it.
-- A separate admin panel — only if the source leaves it unclear whether this run includes it.
-
-Do not ask the platform question again after it has been answered.
 
 ### Ask from this pool only when the current stage is blocked
 
 ### Users and roles
 
 - Which roles are in this pass, when the source names several and does not say which are in scope.
-- Whether a role is only a back-office user, when that would put its screens in another run.
-- Digital literacy of the primary user, when density and guidance cannot be chosen without it.
+- Whether a named group is a system actor or a human role, when that changes the screens.
 
-If the source already names the roles and what each one does, record them as **Confirmed**. Do
-not ask the user to repeat them.
+If the source already names the roles and what each one does, record them as **مؤكد**. Do not
+ask the user to repeat them. Do not invent extra roles to fill a matrix.
 
 ### Scope depth
 
 - MVP is the default. Ask only when the source mixes a small first release with a larger later
-  product and the current document cannot say which is in scope.
+  product and the current section cannot say which is in scope.
 - Record an explicit out-of-scope item when the user already stated one. Do not ask them to
   invent exclusions.
 
-### Locale and content
+### Behavior that changes a screen
 
-- Primary market, when currency, address, phone format, or calendar is otherwise unknown and the
-  current stage needs it.
-- UI language stays **Arabic only, RTL** unless the user said otherwise. That is a default. Do
-  not ask them to confirm it.
-- Digits are always Latin `0-9`. Do not ask.
-- Calendar: Gregorian, Hijri, or both — only when a screen or a rule depends on it.
+Ask only when two readings would produce different screens or different actions, and the source
+does not settle it. Examples: whether a person can both submit and approve, or whether a stated
+"update" includes a decision with named outcomes. If the screen can be specified while leaving
+the unknown as `Q-xx`, do not ask.
+
+### Platform
+
+Ask only when a screen depends on native mobile behavior versus a responsive web layout and the
+source does not say. One question, in Arabic:
+
+> شكل الشاشة يتغير حسب هذا الاختيار. النظام يشتغل على أي منصة؟
+
+- تطبيق ويب متجاوب (مقترح لمشروع Lovable)
+- موبايل أولاً داخل المتصفح
+- تطبيق موبايل أصلي (خارج Lovable)
+- غير محسوم حالياً
+
+**غير محسوم حالياً** records `Q-xx`. Continue with a responsive web prompt and state the
+limitation. Do not invent a splash screen, a permission primer, or a force-update screen.
 
 ### Integrations that create screens
 
-Payments, maps, OTP, notifications, uploads, chat, and third-party redirects. Ask only about an
-integration the current stage cannot describe without an answer. Otherwise record `Q-xx`.
+Payments, maps, OTP, notifications, uploads, and third-party redirects. Ask only about an
+integration the current stage cannot describe without an answer. Otherwise record `Q-xx`. Do
+not add the integration's screens "just in case".
 
-### Constraints
+### Do not ask at intake
 
-Existing backend, deadline, regulation, and accessibility. WCAG 2.1 AA is the default
-accessibility assumption; mark it **Assumption** and do not ask the user to confirm it unless a
-different target is already in play.
+- Product name, when a provisional slug is enough.
+- Confirmation of MVP on an already-small source.
+- UI language, when a retrieved task already states it. When none does, record `Q-xx`. Do not
+  assume Arabic RTL.
+- A design questionnaire: logo, colors, vibe, tone, light or dark, reference products.
+- Scale numbers, stack, auth mechanism, database, or API shape. Those are not this pipeline's
+  documents. If the source is silent, leave `Q-xx` for the backend handoff. Do not invent a
+  target.
 
-### Engineering inputs — stages 5 to 7
+---
 
-Do not spend stage-0 questions on these. When the source is silent, propose a documented
-assumption or leave `Q-xx`. Ask only when the SRS, data model, or API cannot be written without
-the answer.
-
-- Scale numbers, when an `NFR-xx` would otherwise have no target. A missing number becomes an
-  open question, not an invented target.
-- Availability, stack preference, auth model, residency, and who receives the handoff — ask at
-  the stage that needs them, or record them as open.
-
-### Worked example — device maintenance
+## Worked example — device maintenance
 
 This example shows the policy. It is not a rule to copy into other products.
 
@@ -129,85 +182,33 @@ Source:
 | Item | What to do |
 |------|------------|
 | Product name | None was given. Provisional name: Company device maintenance. Slug: `device-maintenance`. Do not ask for a name. |
-| Roles | Confirmed: employee, maintenance staff, manager. Do not ask who the users are. |
+| Roles | Confirmed: employee, maintenance staff, manager. Do not ask who the users are. Do not add an administrator. |
 | Behavior | Confirmed: the employee submits a request with device type and problem; maintenance staff reviews it and updates its status; the manager can see every request and each request's status. |
-| Statuses | Not named. Do not invent names or transitions. Record `Q-xx` in the PRD and keep writing the confirmed behavior. Ask later only if the next decision needs the names. |
+| Statuses | Not named. Do not invent names or transitions. Record `Q-xx` and keep writing the confirmed behavior. A review screen can say the status values are unresolved. |
 | Scope | The source is a small initial workflow. Default **MVP**. Do not ask the user to confirm it. |
-| Platform | Unspecified. It does not block the PRD. Record `Q-xx`. When the screen list or the design brief needs it, ask in Arabic: تطبيق موبايل / تطبيق ويب / الاثنين معاً / غير محسوم حالياً. One short line on why: شكل الشاشات والتنقل يتغير حسب هذا الاختيار. |
+| Platform | Unspecified. Lovable prompts use a responsive web UI. Record `Q-xx`. Do not ask unless a later screen truly depends on a native shell. |
+| Brand | Not supplied. Do not ask at intake. Stage 8 uses placeholders for logo, colors, and vibe. |
+| Extra screens | Do not add sign-in, splash, force-update, notifications, or "my requests" unless the source requires them. |
 
-No other question is required to start the PRD.
+No question is required to start the analysis or to draft the three screens this source supports:
+submit, review-and-update-status, and all-requests. How maintenance staff reaches a request, and
+which status values exist, stay open.
 
----
+### Same example as three Plane tasks
 
-## Stage 13 — platform, if still open, and brand inputs
+This shows consolidation. It is not a retrieved Plane result.
 
-Asked at the start of stage 13, **before** any color, font, layout, or frame size. Never present
-a palette first.
+| Task | Identifier | What the text is |
+|---|---|---|
+| إرسال طلب الصيانة | `MAINT-1` | Requirement: the employee submits a device type and a problem |
+| مراجعة الطلب | `MAINT-2` | Requirement: maintenance staff review the request and update its status |
+| زر الإرسال لا يعمل | `MAINT-3` | A bug report, not a new product requirement |
 
-### Platform
+Treat `MAINT-1` and `MAINT-2` as one project. Merge them into one summary. Do not open two runs,
+and do not create a screen whose only reason is that a task exists. Record `MAINT-3` in the
+source table as a bug, and do not add a functional requirement from it.
 
-If `00-run-log.md` already has a confirmed platform, use it. Do not ask again. Write the frame,
-breakpoints, navigation pattern, and input model into `13-design-brief.md` §0.
-
-If it is still **Open**, this question blocks visual design. Ask it in Arabic and wait:
-
-> شكل الشاشات والتنقل يتغير حسب هذا الاختيار. النظام يكون على أي منصة؟
-
-- تطبيق موبايل
-- تطبيق ويب
-- الاثنين معاً
-- غير محسوم حالياً
-
-**غير محسوم حالياً** means stop before wireframes and UI screens. Do not pick a profile yourself.
-
-If the user changes a platform that earlier documents already used, stop and say what is affected
-before continuing:
-
-- screens in `10-screen-list.md` that exist only on the old platform (splash and permission
-  primers are mobile-only; print view and a deep-link landing are web-only)
-- screens the new platform implies that are missing
-- any `NFR-13` compatibility target in `05-srs.md` that named the old platform
-
-Offer, in Arabic, to revise the screen list first, then return to stage 13.
-
-### Brand questions
-
-Ask only the ones still unanswered. Skip any the user already answered. At most four questions
-in the batch, including the platform question when it is still open.
-
-1. **Existing brand** — a logo, a brand guide, or an existing app or site this must match.
-   Options: يوجد دليل هوية كامل / شعار وألوان فقط / شعار فقط / ماكو شي حالياً.
-   If something exists, ask for the file path or URL and read it before writing the brief.
-2. **Locked elements** — colors or fonts that cannot change. Options: الألوان ثابتة / الخطوط
-   ثابتة / الاثنين ثابتة / ماكو شي ثابت. Ask for hex values and font names only after they say
-   something is locked.
-3. **Tone and theme** — formal, warm, premium, playful, or utilitarian, and light, dark, or both.
-   Offer those as short Arabic labels. Include غير ذلك.
-
-**Reference products** — two or three products this should feel like, and one it should not —
-go in a later round, because the answer is free text. Offer familiar anchors when the domain
-suggests them. Skip this round when the user already named references or when brand assets
-already fix the direction.
-
-### If the answer is "ماكو شي حالياً"
-
-Only then does the skill originate a direction. Propose **three** distinct directions in Arabic
-— each one short paragraph: mood, palette intent, Arabic type pairing, and why it fits this
-audience — and let the user pick or mix before writing the full brief. Do not write three full
-briefs. The three directions must be genuinely different. The written brief itself stays English.
-
-### If brand assets do exist
-
-Extract from them and state in the brief what came from the client's brand versus what you
-defined to fill gaps.
-
-Record the answers in `## Brand inputs (stage 13)` of `00-run-log.md`. If the platform was
-answered or changed here, update the platform, frame, breakpoints, and navigation rows in
-`## Intake answers` too.
-
-### Then hand over the style picker — 13b
-
-Once the platform is settled and the palette and fonts are known, go to 13b: copy
-`../assets/style-library.html` into the run folder, swap in the tokens, and hand it over. Do
-**not** write the design brief first — §6 is written from the picks, not the other way round.
-See `style-picker-guide.md`.
+If the user also names `MAINT-4` and its description is not pasted and no Plane retrieval
+returns it, the source row says **لم يُقرأ**. Do not invent `MAINT-4`. Tell the user that
+`MAINT-4` was not read. Continue with `MAINT-1` through `MAINT-3` when that gap is not a
+blocking conflict.
